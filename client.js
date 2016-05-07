@@ -35,7 +35,7 @@ var getInstances = function(session, cb) {
         id: id++,
         enabled: disabled === 'NO',
         protocol: protocolPort.split('/')[0].trim(),
-        port: protocolPort.split('/')[1].trim(),
+        port: parseInt(protocolPort.split('/')[1]),
         network: network
       });
     });
