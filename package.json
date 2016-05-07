@@ -15,5 +15,9 @@
     "pfsense-session": "^0.1.0"
   },
   "author": "Austin Keeley",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "request": "^2.72.0"
+  }
 }
