@@ -1,0 +1,19 @@
+{
+  "name": "pfsense-openvpn",
+  "version": "0.1.0",
+  "description": "A client to get information about a pfSense OpenVPN server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pfsense",
+    "openvpn",
+    "vpn"
+  ],
+  "peerDependencies": {
+    "pfsense-session": "^0.1.0"
+  },
+  "author": "Austin Keeley",
+  "license": "MIT"
+}
