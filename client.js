@@ -46,8 +46,48 @@ var getInstances = function(session, cb) {
 
 /**
  * Gets all the users connected to an OpenVPN instance
+ * @param session Session object that contains the token
+ * @param instanceID The ID of the OpenVPN network to use
+ * @param cb Callback
  */
-var getUsers = function(session, instance, cb) {
+var getUsers = function(session, instanceID, cb) {
+  request.get({
+    url: 'http://' + session.hostname + '/status_openvpn.php',
+    headers: {
+      'Cookie': 'PHPSESSID=' + session.token
+    }
+  }, function(err, response) {
+    if (err) { cb(err, null); return; }
+
+    var $ = cheerio.load(response.body);
+    var results = [];
+    results = $('table.sortable[summary=connections]').toArray().map(function(network) {
+
+      var userRows = $(network).find('tr').toArray();
+      // chop off the first row and last two
+      userRows.shift();
+      userRows = userRows.slice(0,-2);
+
+      if (userRows.length === 0) { return []; }
+
+      var users = userRows.map(function(row) {
+        var data = $(row).find('td').toArray();
+        return {
+          username: $(data[0]).text().trim(),
+          realAddress: $(data[1]).text().trim(),
+          virtualAddress: $(data[2]).text().trim(),
+          connectedSince: $(data[3]).text().trim(),
+          bytesSent: $(data[4]).text().trim(),
+          bytesReceived: $(data[5]).text().trim()
+        };
+      });
+      return users;
+
+    });
+    cb(null, results[instanceID]);
+
+  });
+
 };
 
 module.exports = {
