@@ -2,6 +2,8 @@
 
 var request = require('request');
 var cheerio = require('cheerio');
+var moment = require('moment');
+var bytes = require('bytes');
 
 /**
  * Gets all the OpenVPN instances running on this pfSense host
@@ -72,13 +74,20 @@ var getUsers = function(session, instanceID, cb) {
 
       var users = userRows.map(function(row) {
         var data = $(row).find('td').toArray();
+
+        var connectionTime = $(data[3]).text().trim();
+        connectionTime = moment(connectionTime, 'ddd MMMM DD HH:mm:ss YYYY').toDate();
+        var bytesSent     =  bytes.parse($(data[4]).text().trim());
+        var bytesReceived =  bytes.parse($(data[5]).text().trim());
+
         return {
           username: $(data[0]).text().trim(),
-          realAddress: $(data[1]).text().trim(),
+          realAddress: $(data[1]).text().trim().split(':')[0],
+          realPort: parseInt($(data[1]).text().trim().split(':')[1]),
           virtualAddress: $(data[2]).text().trim(),
-          connectedSince: $(data[3]).text().trim(),
-          bytesSent: $(data[4]).text().trim(),
-          bytesReceived: $(data[5]).text().trim()
+          connectedSince: connectionTime,
+          bytesSent: bytesSent,
+          bytesReceived: bytesReceived
         };
       });
       return users;

@@ -17,7 +17,9 @@
   "author": "Austin Keeley",
   "license": "MIT",
   "dependencies": {
+    "bytes": "^2.3.0",
     "cheerio": "^0.20.0",
+    "moment": "^2.13.0",
     "request": "^2.72.0"
   }
 }
