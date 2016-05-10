@@ -12,22 +12,30 @@ Gets VPN and user information for OpenVPN instances hosted by a pfSense host.
 `getInstances` - Gets a list of OpenVPN networks. Returns via callback an array of 
 objects with the following properties:
 
-* id
+* id (Number)
 * enabled (Boolean)
 * protocol (TCP or UDP)
 * port (Number)
 * network (String, CIDR notation)
 
-Example: 
+Parameters:
+* cb(err, instances) - Callback function that returns the instances
 
-    var client = require('pfsense-openvpn');
-    var pfSenseSession = require('pfsense-session');
 
-    pfSenseSession.login('10.0.1.1', 'admin', 'pfsense', function(err, session) {
-      client.getInstances(session, function(err, instances) {
-        if (err) { console.log(err); }
-        else {
-          console.log(instances);
-        }
-      });
-    });
+
+`getUsers` - Gets a list of users connected to an OpenVPN instance. Returns via 
+callback an array of objects with the following properties:
+
+* username (String)
+* realAddress (String)
+* realPort (Number)
+* virtualAddress (String)
+* connectedSince (Date)
+* bytesSent (Number)
+* bytesReceived
+
+Parameters:
+* instanceID - The OpenVPN network ID
+* cb(err, users) - Callback function that returns the array of users
+
+
